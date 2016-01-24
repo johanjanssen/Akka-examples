@@ -1,17 +1,19 @@
-import akka.actor.ActorSystem
+import akka.actor.{Props, ActorSystem}
 import akka.cluster.sharding.{ClusterShardingSettings, ClusterSharding}
 import akka.cluster.sharding.ShardRegion.{ExtractShardId, ExtractEntityId}
 import com.typesafe.config.ConfigFactory
 
 object Startup extends App {
-  // Get the hostname from the args
-  val host = args(0)
-  val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.hostname=$host").withFallback(ConfigFactory.load())
-  val actorSystem = ActorSystem.create("ClusterNode", config)
 
-  startSharding()
+  args.toList match {
+    case "--port" :: value :: tail =>
+      val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$value").withFallback(ConfigFactory.load())
+      val system = ActorSystem("ClusterNode", config)
+      startSharding(system)
+    case _ => println("Supply a port")
+  }
 
-  def startSharding(): Unit = {
+  def startSharding(actorSystem: ActorSystem): Unit = {
     val idExtractor: ExtractEntityId = {
       case i: Int => (i.toString, "")
     }
@@ -30,7 +32,6 @@ object Startup extends App {
       shardResolver
     )
   }
-
 }
 
 
