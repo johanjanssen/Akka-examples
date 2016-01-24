@@ -7,15 +7,24 @@ Some of the things we did in these examples, but what you should not do:
 
 
 - In general
-Most applications can be started with 'sbt run'.
+* Most applications can be started with 'sbt run'.
+* Do not forget to change ports, ip addresses etc.
 
 - Remote actors messageprotol
 This is used to store the messages used by 'Remote actors coordinator' and 'Remote actors worker' to prevent code duplication.
 To use this project simple publish it in the local repo with the command 'sbt publishLocal'
 
-- Akka cluster and other examples that you want to deploy
+- 'Akka cluster' and 'Akka cluster user' can be run by specifying the port (if you run everything on one machine) or the IP address (if you want to run every node on a separate machine)
+For running on one machine, start the cluster nodes with 'sbt "run --port [port]"'. So for instance 'sbt "run --port 2550"'
+For running on multiple machines, start the cluster nodes with 'sbt "run --ip [ip]"'. So for instance 'sbt "run --ip 192.168.1.1"'
+## Attention the multiple machine option is not tested yet.
+
+- Akka cluster with routing and other examples that you want to deploy
 Create fat jar with the command 'sbt assembly'.
 Start the fat jar with the command 'java -jar *.jar'.
 For the cluster start the fat jar with the command 'java -jar *.jar [IP_ADDRESS]', please enter the IP address of the machine on which the application is running.
+
+
+
 
 
