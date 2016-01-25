@@ -27,7 +27,7 @@ class Coordinator extends Actor {
 
   override def receive = {
     case x: String =>
-      val senderIp = sender().path.address.port.toString
+      val senderIp = sender().path.address.port.get.toString
       val count = ipAddressCounter.getOrElse(senderIp, 0)
       ipAddressCounter += (senderIp -> (count + 1))
 

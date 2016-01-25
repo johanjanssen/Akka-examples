@@ -1,9 +1,10 @@
-import akka.actor.{Props, ActorSystem}
+import akka.actor.{ActorSystem, Props}
+import akka.cluster.sharding.ClusterSharding
 import akka.cluster.sharding.ShardRegion._
-import akka.cluster.sharding.{ClusterSharding, ClusterShardingSettings}
 import com.typesafe.config.ConfigFactory
 
 object Startup extends App {
+
   args.toList match {
     case "--port" :: value :: tail =>
       val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$value").withFallback(ConfigFactory.load())
@@ -14,22 +15,19 @@ object Startup extends App {
   }
 
   def startSharding(actorSystem: ActorSystem): Unit = {
-    val idExtractor: ExtractEntityId = {
+    def idExtractor: ExtractEntityId = {
       case i: Int => (i.toString, "")
     }
 
-    val maxNumberOfShards = 10
-
-    val shardResolver: ExtractShardId = {
-      case i: Int => (i % maxNumberOfShards).toString
+    def shardResolver(numberOfShards: Int): ExtractShardId = {
+      case i: Int => (i % numberOfShards).toString
     }
 
-    ClusterSharding(actorSystem).start(
+    ClusterSharding(actorSystem).startProxy(
       "shardName",
-      EmptyStringActor.props,
-      ClusterShardingSettings(actorSystem),
+      None,
       idExtractor,
-      shardResolver
+      shardResolver(20)
     )
   }
 

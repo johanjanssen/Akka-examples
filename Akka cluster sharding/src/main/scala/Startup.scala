@@ -1,6 +1,6 @@
-import akka.actor.{Props, ActorSystem}
-import akka.cluster.sharding.{ClusterShardingSettings, ClusterSharding}
-import akka.cluster.sharding.ShardRegion.{ExtractShardId, ExtractEntityId}
+import akka.actor.ActorSystem
+import akka.cluster.sharding.ShardRegion.{ExtractEntityId, ExtractShardId}
+import akka.cluster.sharding.{ClusterSharding, ClusterShardingSettings}
 import com.typesafe.config.ConfigFactory
 
 object Startup extends App {
@@ -14,14 +14,12 @@ object Startup extends App {
   }
 
   def startSharding(actorSystem: ActorSystem): Unit = {
-    val idExtractor: ExtractEntityId = {
+    def idExtractor: ExtractEntityId = {
       case i: Int => (i.toString, "")
     }
 
-    val maxNumberOfShards = 10
-
-    val shardResolver: ExtractShardId = {
-      case i: Int => (i % maxNumberOfShards).toString
+    def shardResolver(numberOfShards: Int): ExtractShardId = {
+      case i: Int => (i % numberOfShards).toString
     }
 
     ClusterSharding(actorSystem).start(
@@ -29,9 +27,7 @@ object Startup extends App {
       EmptyStringActor.props,
       ClusterShardingSettings(actorSystem),
       idExtractor,
-      shardResolver
+      shardResolver(20)
     )
   }
 }
-
-
