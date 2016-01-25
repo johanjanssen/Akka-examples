@@ -27,7 +27,7 @@ object Startup extends App {
       EmptyStringActor.props,
       ClusterShardingSettings(actorSystem),
       idExtractor,
-      shardResolver(20)
+      shardResolver(2)
     )
   }
 }

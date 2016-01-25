@@ -27,7 +27,7 @@ object Startup extends App {
       "shardName",
       None,
       idExtractor,
-      shardResolver(20)
+      shardResolver(2)
     )
   }
 
