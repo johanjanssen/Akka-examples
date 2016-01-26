@@ -42,10 +42,12 @@ class Coordinator extends Actor {
       if (messageCounter == 10000) {
         stopProcessing
       } else {
-        val msg: Int = if (Random.nextBoolean())
-          Random.nextInt(10)
+        // 2/3 chance of getting an even number
+        val base = Random.nextInt(5) * 2
+        val msg: Int = if (Random.nextInt(3) >= 1)
+          base
         else
-          Random.nextInt(5)
+          base + 1
 
         shardingRegion ! msg
       }
