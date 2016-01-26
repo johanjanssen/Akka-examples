@@ -51,8 +51,8 @@ class Coordinator extends Actor {
   def stopProcessing: Unit = {
     messageScheduler.cancel()
     overviewScheduler.cancel()
-    self ! Overview
+    context.system.scheduler.scheduleOnce(5.seconds, self, Overview)
     router ! PoisonPill
-    context.system.scheduler.scheduleOnce(5.seconds, self, TerminateSystem)
+    context.system.scheduler.scheduleOnce(10.seconds, self, TerminateSystem)
   }
 }
