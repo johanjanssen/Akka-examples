@@ -7,3 +7,5 @@ addSbtPlugin("org.brianmckenna" % "sbt-wartremover" % "0.14") // Static code qua
 addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.5") // Calculate number of files, lines and characters
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.3.5") // Calculate coverage
+
+//addSbtPlugin("com.typesafe.sbt" % "sbt-aspectj" % "0.9.4")
