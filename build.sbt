@@ -192,7 +192,6 @@ lazy val `two-actors-code-quality` = project
     scapegoatVersion := "1.3.0",
     addCommandAlias("tests", ";clean ;coverage ;test ;coverageReport"),
     addCommandAlias("static", ";scalastyle ;scapegoat ;stats")
-    //scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
   )
 
 lazy val `two-actors-kamon-console-log` = project
